@@ -13,17 +13,17 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 ## Table of Contents
 
 - [Installation](#Installation)
-- Connector
+- Connector(#Connector)
   - [S3 Connector](#S3_Connector)
   - [MySQL Connector](#MySQL_Connector)
   - [MongoDB Connector](#MongoDB_Connector)
   - [BigQuery Connector](#BigQuery_Connector)
  
-- Configurer
+- Configurer(#Configurer)
   - [Log Formatter](#Log_Formatter)
   - [Profile Decorator](#Profile_Decorator)
   
-- Alerter
+- Alerter(#Alerter)
   - [Slack Alerter](#Slack_Alerter)
 
 ***
@@ -39,7 +39,7 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 ---
     
 	
-## 1. Connector  
+## 1. Connector<a id="Connector" name="Connector">
 
     
 ### 1. S3 Connector<a id="S3_Connector" name="S3_Connector">     
@@ -161,7 +161,7 @@ BigQuery.insert_rows_in_bigquery(dataset="rahul_temp", table="Demo", rows_to_ins
 ---
 	
 	
-## 2. Configurer    
+## 2. Configurer<a id="Configurer" name="Configurer">   
 	
 ### 1. Profile Decorator<a id="Profile_Decorator" name="Profile_Decorator">    
     
@@ -200,122 +200,21 @@ LogFormatter.apply()
     
 **Log Formatter Documentation**
 ```
-class LogFormatter(logging.Formatter)
- |  LogFormatter(fmt=None, datefmt=None, style='%', validate=True)
- |  
- |  Log Formatter class
- |  
- |  Method resolution order:
- |      LogFormatter
- |      logging.Formatter
- |      builtins.object
- |  
- |  Methods defined here:
- |  
- |  formatException(self, execution_info)
- |      Handle logging in case of exceptions.
- |      :param execution_info:
- |      :return:
- |  
- |  ----------------------------------------------------------------------
- |  Static methods defined here:
- |  
- |  apply(level=20)
- |      Start logging in json format.
- |      :return:
- |  
- |  ----------------------------------------------------------------------
- |  Methods inherited from logging.Formatter:
- |  
- |  __init__(self, fmt=None, datefmt=None, style='%', validate=True)
- |      Initialize the formatter with specified format strings.
- |      
- |      Initialize the formatter either with the specified format string, or a
- |      default as described above. Allow for specialized date formatting with
- |      the optional datefmt argument. If datefmt is omitted, you get an
- |      ISO8601-like (or RFC 3339-like) format.
- |      
- |      Use a style parameter of '%', '{' or '$' to specify that you want to
- |      use one of %-formatting, :meth:`str.format` (``{}``) formatting or
- |      :class:`string.Template` formatting in your format string.
- |      
- |      .. versionchanged:: 3.2
- |         Added the ``style`` parameter.
- |  
- |  format(self, record)
- |      Format the specified record as text.
- |      
- |      The record's attribute dictionary is used as the operand to a
- |      string formatting operation which yields the returned string.
- |      Before formatting the dictionary, a couple of preparatory steps
- |      are carried out. The message attribute of the record is computed
- |      using LogRecord.getMessage(). If the formatting string uses the
- |      time (as determined by a call to usesTime(), formatTime() is
- |      called to format the event time. If there is exception information,
- |      it is formatted using formatException() and appended to the message.
- |  
- |  formatMessage(self, record)
- |  
- |  formatStack(self, stack_info)
- |      This method is provided as an extension point for specialized
- |      formatting of stack information.
- |      
- |      The input data is a string as returned from a call to
- |      :func:`traceback.print_stack`, but with the last trailing newline
- |      removed.
- |      
- |      The base implementation just returns the value passed in.
- |  
- |  formatTime(self, record, datefmt=None)
- |      Return the creation time of the specified LogRecord as formatted text.
- |      
- |      This method should be called from format() by a formatter which
- |      wants to make use of a formatted time. This method can be overridden
- |      in formatters to provide for any specific requirement, but the
- |      basic behaviour is as follows: if datefmt (a string) is specified,
- |      it is used with time.strftime() to format the creation time of the
- |      record. Otherwise, an ISO8601-like (or RFC 3339-like) format is used.
- |      The resulting string is returned. This function uses a user-configurable
- |      function to convert the creation time to a tuple. By default,
- |      time.localtime() is used; to change this for a particular formatter
- |      instance, set the 'converter' attribute to a function with the same
- |      signature as time.localtime() or time.gmtime(). To change it for all
- |      formatters, for example if you want all logging times to be shown in GMT,
- |      set the 'converter' attribute in the Formatter class.
- |  
- |  usesTime(self)
- |      Check if the format uses the creation time of the record.
- |  
- |  ----------------------------------------------------------------------
- |  Static methods inherited from logging.Formatter:
- |  
- |  converter = localtime(...)
- |      localtime([seconds]) -> (tm_year,tm_mon,tm_mday,tm_hour,tm_min,
- |                                tm_sec,tm_wday,tm_yday,tm_isdst)
- |      
- |      Convert seconds since the Epoch to a time tuple expressing local time.
- |      When 'seconds' is not passed in, convert the current time instead.
- |  
- |  ----------------------------------------------------------------------
- |  Data descriptors inherited from logging.Formatter:
- |  
- |  __dict__
- |      dictionary for instance variables (if defined)
- |  
- |  __weakref__
- |      list of weak references to the object (if defined)
- |  
- |  ----------------------------------------------------------------------
- |  Data and other attributes inherited from logging.Formatter:
- |  
- |  default_msec_format = '%s,%03d'
- |  
- |  default_time_format = '%Y-%m-%d %H:%M:%S'
+class LogFormatter(logging.Formatter):
+    """Log Formatter class for trell ai usage"""
+
+    __date_format = '%d/%b/%Y:%H:%M:%S %Z'
+
+    @staticmethod
+    def apply(level=logging.INFO):
+        """
+        Start logging in json format.
+        :return:
 ```
 ---
 	
 	
-## 3. Alerter    
+## 3. Alerter<a id="Alerter" name="Alerter">    
 	
 ###  1.  Slack Alerter<a id="Slack_Alerter" name="Slack_Alerter">  
     
