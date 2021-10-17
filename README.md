@@ -13,17 +13,17 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 ## Table of Contents
 
 - [Installation](#Installation)
-- Connector(#Connector)
+- [Connector](#Connector)
   - [S3 Connector](#S3_Connector)
   - [MySQL Connector](#MySQL_Connector)
   - [MongoDB Connector](#MongoDB_Connector)
   - [BigQuery Connector](#BigQuery_Connector)
  
-- Configurer(#Configurer)
+- [Configurer](#Configurer)
   - [Log Formatter](#Log_Formatter)
   - [Profile Decorator](#Profile_Decorator)
   
-- Alerter(#Alerter)
+- [Alerter](#Alerter)
   - [Slack Alerter](#Slack_Alerter)
 
 ***
