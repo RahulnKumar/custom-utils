@@ -7,7 +7,7 @@ import requests
 import pandas_gbq as gbq
 from google.cloud import bigquery
 from google.oauth2.service_account import Credentials
-from utilities.exceptions import (
+from custom_utils.exceptions import (
      BigQueryConnectionError,
      BigQueryDataFetchError,
      BigQueryGenericError

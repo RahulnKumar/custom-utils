@@ -1,12 +1,12 @@
-# utilities
+# custom-utils
 Pip Package for Database Connectors, Alerter, Log Formatter etc
 
 
 ***
 
 <p float="left">
-  <img src=https://img.shields.io/pypi/v/utilities />
-  <img src=https://img.shields.io/pypi/dm/utilities?logo=Python&style=social /> 
+  <img src=https://img.shields.io/pypi/v/custom-utils />
+  <img src=https://img.shields.io/pypi/dm/custom_utils?logo=Python&style=social /> 
 </p>
  
 
@@ -31,12 +31,12 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 ## 1.  Installation<a id="Installation" name="Installation">    
 
 - **Installation** (Any one)      
-    `pip install utilities`  --> minimal installation  
-    `pip install utilities[full]` --> full installation  
-    `pip install utilities[s3,mysql,bigquery,mongodb]`  --> selective installation  
-    `pip install git+https://github.com/rahulnkumar/utilities.git`  
-    `pip install git+https://github.com/rahulnkumar/utilities.git@<tag_no>`  
-    `pip install git+https://github.com/rahulnkumar/utilities.git@<branch_name>`    
+    `pip install custom-utils`  --> minimal installation  
+    `pip install custom-utils[full]` --> full installation  
+    `pip install custom-utils[s3,mysql,bigquery,mongodb]`  --> selective installation  
+    `pip install git+https://github.com/rahulnkumar/custom-utils.git`  
+    `pip install git+https://github.com/rahulnkumar/custom-utils.git@<tag_no>`  
+    `pip install git+https://github.com/rahulnkumar/custom-utils.git@<branch_name>`    
     
 ---
     
@@ -48,7 +48,7 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 
 **Code Snippet Sample :**
 ```python
-from utilities.connector.s3 import S3
+from custom_utils.connector.s3 import S3
 
 # Uplaoding data to S3
 demo = {"Name": "Trell", "Age": 4}
@@ -102,7 +102,7 @@ class S3(builtins.object)
 **Code Snippet Sample :**  
 ```python
 # Query from Custom MySQL Database
-from utilities.connector.mysql import MySQL 
+from custom_utils.connector.mysql import MySQL 
 user = "***"
 password = "***"
 host = "***"
@@ -152,7 +152,7 @@ class MySQL(builtins.object)
     
 **Code Snippet Sample :**  
 ```python
-from utilities.connector.mongodb import MongoDB
+from custom_utils.connector.mongodb import MongoDB
 uri = "****"
 db = "***"
 collection = "****"
@@ -259,7 +259,7 @@ class MongoDB(builtins.object)
 ```python
 
 # Fetching data from BigQuery
-from utilities.connector.bigquery import BigQuery
+from custom_utils.connector.bigquery import BigQuery
 bq = BigQuery(read_big_query_project = "****",
                     service_account_file_path="***.json")
 query = "select * from `trellatale.trellDbDump.userLanguages` limit 2"
@@ -338,7 +338,7 @@ class BigQuery(builtins.object)
     
 **Code Snippet Sample :**  
 ```python
-from utilities.configurer.profiler import profiler
+from custom_utils.configurer.profiler import profiler
 @profiler(sort_by='cumulative', lines_to_print=10, strip_dirs=True)
 def product_counter_v3():
     return [1, 2, 3, 4, 5]
@@ -365,7 +365,7 @@ def profiler(output_file=None, sort_by='cumulative', lines_to_print=None, strip_
  
 **Code Snippet Sample :**
 ```python
-from utilities.configurer.utils import LogFormatter
+from custom_utils.configurer.utils import LogFormatter
 LogFormatter.apply()
 ```
     
@@ -392,7 +392,7 @@ class LogFormatter(logging.Formatter):
     
 **Code Snippet Sample :**
 ```
-from utilities.slack_alerter import Alerter
+from custom_utils.slack_alerter import Alerter
 try:
     """Write your code"""
 except:

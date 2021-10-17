@@ -3,7 +3,7 @@
 import logging
 import sqlalchemy
 import pandas as pd
-from utilities.exceptions import MysqlConnectionError, MysqlDataFetchError, MysqlGenericError
+from custom_utils.exceptions import MysqlConnectionError, MysqlDataFetchError, MysqlGenericError
 
 
 class MySQL:

@@ -1,4 +1,4 @@
-"""Setup for the utilities package."""
+"""Setup for the custom-utils package."""
 
 from itertools import chain
 from setuptools import setup, find_packages
@@ -20,12 +20,12 @@ EXTRAS_REQUIRE['full'] = list(set(chain(*EXTRAS_REQUIRE.values())))
 setup(
     author="Rahul Kumar",
     author_email="rahulnkumar7@gmail.com",
-    name='utilities',
+    name='custom-utils',
     description='Utilities for database connectors, slack alerter, loggers etc',
     version="0.0.0",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/RahulnKumar/utilities',
+    url='https://github.com/RahulnKumar/custom-utils',
     packages=find_packages(),
     python_requires=">=3.6.9",
     install_requires=['requests', 'json-utils', 'python-dotenv', 'subprocess32', 'psutil',],

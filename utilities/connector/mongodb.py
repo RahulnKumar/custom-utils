@@ -5,7 +5,7 @@ import logging
 import pandas as pd
 from pymongo import MongoClient
 
-from utilities.exceptions import MongodbConnectionError
+from custom_utils.exceptions import MongodbConnectionError
 
 
 class MongoDB:
