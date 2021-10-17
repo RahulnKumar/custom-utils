@@ -32,10 +32,13 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 
 ## 1.  Installation<a id="Installation" name="Installation">    
 
-- **Installation** (Any one)      
+- **Installation from Pypi repository** (Any one)
+	
     `pip install custom-utils`  --> minimal installation  
     `pip install custom-utils[full]` --> full installation  
-    `pip install custom-utils[s3,mysql,bigquery,mongodb]`  --> selective installation  
+    `pip install custom-utils[s3,mysql,bigquery,mongodb]`  --> selective installation 
+- **Installation from github repository** (Any one)  
+	
     `pip install git+https://github.com/rahulnkumar/custom-utils.git`  
     `pip install git+https://github.com/rahulnkumar/custom-utils.git@<tag_no>`  
     `pip install git+https://github.com/rahulnkumar/custom-utils.git@<branch_name>`    
