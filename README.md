@@ -5,8 +5,8 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 ***
 
 <p float="left">
-  <img src=https://img.shields.io/pypi/v/trell-ai-utils />
-  <img src=https://img.shields.io/pypi/dm/trell-ai-utils?logo=Python&style=social /> 
+  <img src=https://img.shields.io/pypi/v/utilities />
+  <img src=https://img.shields.io/pypi/dm/utilities?logo=Python&style=social /> 
 </p>
  
 
