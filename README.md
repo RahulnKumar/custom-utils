@@ -279,6 +279,53 @@ BigQuery.insert_rows_in_bigquery(dataset="rahul_temp", table="Demo", rows_to_ins
     
 **BigQuery Connector Documentaion**
 ```
+class BigQuery(builtins.object)
+ |  BigQuery(read_big_query_project, write_big_query_project, service_account_file_path)
+ |  
+ |  BigQuery database utility functions
+ |  
+ |  Methods defined here:
+ |  
+ |  __init__(self, read_big_query_project, write_big_query_project, service_account_file_path)
+ |      initialisation method for BigQuery Connector
+ |      :param str read_big_query_project : project used while reading from BigQuery
+ |      :param str write_big_query_project: project used while writing into BigQuery
+ |      :param str service_account_file_path: project specific BigQuery Credential
+ |  
+ |  dump_data(self, database=None, table=None, dataframe=None, mode='append')
+ |      Dumps data into from BigQuery
+ |      :param string database: target bigquery database
+ |      :param string table: target table name
+ |      :param pd.DataFrame dataframe: pandas dataframe for dumping into bigquery
+ |      :param string mode: it can be either append or replace
+ |  
+ |  execute_query(self, query, query_config=None, max_retries=0, time_interval=5)
+ |      Executes query from from BigQuery table
+ |      :param string query: query for execution
+ |      :param string query_cofig: config for parameterised query
+ |      :param string max_retries: maximum retries if data is not fetched
+ |      :param integer time_interval : time interval between retries
+ |  
+ |  get_data(self, query=None, query_config=None, max_retries=0, time_interval=5)
+ |      Fetches data from from BigQuery
+ |      :param string query: query for fetching data from table
+ |      :param string query_cofig: config for parameterised query
+ |      :param string max_retries: maximum retries if data is not fetched
+ |      :param integer time_interval : time interval between retries
+ |  
+ |  insert_rows_array(self, dataset=None, table=None, rows_to_insert=None)
+ |      Streaming insert into from BigQuery
+ |      :param string dataset: target bigquery database
+ |      :param string table: target table name
+ |      :param list rows_to_insert: list of dictionaries where each dictionary is a
+ |                                  row with keys as column names
+ |  
+ |  insert_rows_in_bigquery(self, dataset=None, table=None, rows_to_insert=None)
+ |      Streaming insert into from BigQuery
+ |      :param string dataset: target bigquery database
+ |      :param string table: target table name
+ |      :param  rows_to_insert: list of dictionaries where each dictionary is a
+ |                              row with keys as column names
 ```
 ---
 	
