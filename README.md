@@ -38,15 +38,15 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
     
 ---
     
+	
+## 1. Connector  
 
     
-
-    
-## 4. S3 Connector<a id="S3_Connector" name="S3_Connector">     
+### 1. S3 Connector<a id="S3_Connector" name="S3_Connector">     
 
 **Code Snippet Sample :**
 ```python
-from trell.S3 import S3
+from utilities.connector.S3 import S3
 
 # Uplaoding data to S3
 demo = {"Name": "Trell", "Age": 4}
@@ -63,57 +63,19 @@ demo = S3.read_from_s3_bucket(bucket='data-science-datas',
 
 **S3 Connector Documentation**
     
-```python
-class S3:
-
-    """AWS S3 utility functions"""
-
-    @staticmethod
-    def read_from_s3_bucket(bucket='data-science-datas', sub_bucket='tests/', file_name='test.pkl'):
-        """
-        read data stored in S3 bucket
-        :param string bucket: bucket name
-        :param string sub_bucket: sub-bucket name
-        :param string file_name: name of the file to be read
-        :return old_data : python object stored in the S3
-        """
-        
-    @staticmethod
-    def write_to_s3_bucket(python_data_object=None, bucket='data-science-datas', sub_bucket='tests/', file_name='test.pkl'):
-        """
-        write python objects/variables etc  into S3 bucket
-        :param string bucket: bucket name
-        :param string sub_bucket: sub-bucket name
-        :param string file_name: name of the file to be written
-        :return None
-        """
-
-    @staticmethod
-    def upload_data_from_local_to_s3(model_file_name, bucket='', sub_bucket=''):
-        """
-        write data stored in local machine into S3 bucket from 
-        :param string bucket: bucket name
-        :param string sub_bucket: sub-bucket name
-        :param string file_name: name of the file to be written
-        :return None
-        """
+```
 ```
 ---
     
 
 ---
    
-## 6. MySQL Connector<a id="MySQL_Connector" name="MySQL_Connector">  
+### 2. MySQL Connector<a id="MySQL_Connector" name="MySQL_Connector">  
   
 **Code Snippet Sample :**  
 ```python
-# Query from Production MySQL trellDb database
-from trell.MySQL import MySQL 
-query = "select languageId from trellDb.userLanguages where userId = 61668931"
-df = MySQL.get_prod_data(query)
-
 # Query from Custom MySQL Database
-from trell.MySQL import MySQL 
+from utilities.connector.mysql import MySQL 
 user = "***"
 password = "***"
 host = "***"
@@ -126,174 +88,21 @@ df = mysql.get_data(query = query)
 ```
     
 **MySQL Connector Documentaion**
-```python
-class MySQL:
-
-    """MySQL database utility functions"""
-
-    def __init__(self, db_string):
-        """
-        initialisation method for MySQL connector
-        :param string db_string: mysql database connection string
-        """
-     
-    def get_data(self, query):
-        """
-        Fetch data from mysql as a dataframe.
-        :param string query: query for fetching data from table
-        :return pd.DataFrame data
-        """
- 
-    def execute_query(self, query):
-        """
-        Execute a query in the mysql table
-        :param string query: query for execution in the table
-        :return None
-        """
-   
-    def dump_data(self, data, table_name, mode="append"):
-        """
-        Execute a query in the mysql table
-        :param string query: query for execution in the table
-        :param string table_name: name of the the target table
-        :param string mode: it can be either replace or append
-        :return None
-        """
-        
-    @staticmethod
-    def get_prod_data_from_local(query):
-        """
-        Fetch data from production mysql from local machine via SSH tunnelling (or local port forwarding).
-        :param string query: query for execution in the table 
-        :return:
-        """
-        
-    @staticmethod
-    def get_prod_data(query):
-        """
-        Fetch data from production mysql as a dataframe.
-        :param string query: query for fetching data from table
-        :return pd.DataFrame data
-        """
-        
-    @staticmethod
-    def execute_query_in_prod(query):
-        """
-        Execute a query in the production mysql table
-        :param string query: query for execution in the table
-        :return:
-        """
-        
-    @staticmethod
-    def dump_into_prod(data, table_name, mode="append"):
-        """
-        Push data into production mysql table
-        :param pd.DataFrame data: dataframe to be appended or replaced
-        :param string table_name: name of the the target table
-        :param string mode: it can be either replace or append
-        :return:
-        """
+```
 ```
     
 ---
     
-## 7.  BigQuery Connector<a id="BigQuery_Connector" name="BigQuery_Connector">
+    
+### 3.  MongoDB Connector<a id="MongoDB_Connector" name="MongoDB_Connector">
     
 **Code Snippet Sample :**  
 ```python
-
-# Fetching data from BigQuery
-from trell.BigQuery import BigQuery
-bq = BigQuery(read_big_query_project = "****",
-                    service_account_file_path="***.json")
-query = "select * from `trellatale.trellDbDump.userLanguages` limit 2"
-df = bq.get_data(query)
-
-# Dumping Dataframe in BigQuery
-bq.dump_data(database="rahul_temp", table="demo", dataframe=df, mode="append")
-
-# Executing any query in BigQuery
-query = "INSERT rahul_temp.Demo (id, userId) VALUES(1,1),(1,1)"
-BigQuery.execute_query(query)
-
-# Streaming insert in BigQuery
-row_to_insert = [{"id": 1, "userid": 1, "languageId": 58,
-             "mode":0,"active":1}]
-BigQuery.insert_rows_in_bigquery(dataset="rahul_temp", table="Demo", rows_to_insert=row_to_insert)
-
-```
-    
-**BigQuery Connector Documentaion**
-```python
-
-class BigQuery:
-
-    """BigQuery database utility functions"""
-
-    def __init__(self, read_big_query_project = config.READ_BIG_QUERY_PROJECT,
-                       write_big_query_project = config.WRITE_BIG_QUERY_PROJECT,
-                       service_account_file_path=config.BIG_QUERY_SERVICE_ACCOUNT_FILE_PATH):
-
-        """
-        initialisation method for BigQuery Connector
-        :param str read_big_query_project : project used while reading from BigQuery
-        :param str write_big_query_project: project used while writing into BigQuery
-        :param str service_account_file_path: project specific BigQuery Credential
-        """
-        
-    def get_data(self, query=None, query_config=None, max_retries=0, time_interval=5):
-        """
-        Fetches data from from BigQuery
-        :param string query: query for fetching data from table
-        :param string query_cofig: config for parameterised query
-        :param string max_retries: maximum retries if data is not fetched
-        :param integer time_interval : time interval between retries
-        """
-
-    def execute_query(self, query, query_config=None, max_retries=0, time_interval=5):
-        """
-        Executes query from from BigQuery table
-        :param string query: query for execution
-        :param string query_cofig: config for parameterised query
-        :param string max_retries: maximum retries if data is not fetched
-        :param integer time_interval : time interval between retries
-        """
-
-    def dump_data(self, database=None, table=None, dataframe=None, mode="append"):
-        """
-        Dumps data into from BigQuery
-        :param string database: target bigquery database
-        :param string table: target table name
-        :param pd.DataFrame dataframe: pandas dataframe for dumping into bigquery
-        :param string mode: it can be either append or replace
-        """
-
-    def insert_rows_array(self, dataset=None, table=None, rows_to_insert=None):
-        """
-        Streaming insert into from BigQuery
-        :param string dataset: target bigquery database
-        :param string table: target table name
-        :param list rows_to_insert: list of dictionaries where each dictionary is a row with keys as column names
-        """
-
-    def insert_rows_in_bigquery(self, dataset=None, table=None, rows_to_insert=None):
-        """
-        Streaming insert into from BigQuery
-        :param string dataset: target bigquery database
-        :param string table: target table name
-        :param list rows_to_insert: list of dictionaries where each dictionary is a row with keys as column names
-        """
-```
----
-    
-## 7.  MongoDB Connector<a id="MongoDB_Connector" name="MongoDB_Connector">
-    
-**Code Snippet Sample :**  
-```python
+from utilities.connector.mongodb import MongoDB
 uri = "****"
 db = "***"
 collection = "****"
-mongo = MongoAdapter(uri = uri, db = db)
+mongo = MongoDb(uri = uri, db = db)
 
 #Reading with pull method
 data =  mongo.pull_data(collection=collection, list_dict=list_dict)
@@ -316,92 +125,41 @@ mongo.delete_data(collection=collection, overall=False, condition_dict= {"id":No
 ```
 
  **MongoDB Connector Documentaion**
-```python
-
-class MongoDB:
-    
-    """
-    MongoDB utility functions.
-    """
-    
-    def __init__(self, db=None, uri=None):
-        """
-        initialisation method for MongoDB connector
-        :param str db: database name
-        :param str uri: mongo uri string for establishing connection
-        """
-        
-    def push_data(self, data, collection, db=None):
-        """
-        Function for inserting data into db
-        :param str db : database name
-        :param str collection : collection name
-        :param list/pd.DataFrame data : data to be inserted in the form of dataframe or list of dictionaries
-        :return:
-        """
-            
-    def pull_data(self, list_dict, collection, db=None):
-        """
-        Function for inserting data into db
-        :param str db : database name
-        :param str collection : collection name
-        :param list list_dict : query for fetching data
-        :return: pd.DataFrame 
-        """
-            
-    def update_value(self, id_dict, set_dict, collection, db=None, upsert=None):
-        """
-        Function for updating data into db
-        :param str db : database name
-        :param str collection : collection name
-        :param dict id_dict : query for updation
-        :param dict set_dict : key and value dictionary to be updated
-        :param bool upsert : whether to upsert or just update
-        :return:
-        """
-
-    def upsert_json(self, output_json, upsert_keys, collection, db=None):
-        """
-        Function for inserting data into db
-        :param str db : database name
-        :param str collection : collection name
-        :param dict output_json : list of dictionaries where each dictionary is a row with keys as column names
-        :param list upsert_keys : keys to be upserted
-        :return:
-        """
-
-    def delete_data(self,collection, db=None, overall=False, condition_dict=None):
-        """
-        Function for inserting data into db
-        :param str db : database name
-        :param str collection : collection name
-        :param bool overall : delete whole collection if True
-        :param dict condition_dict : query for deletion
-        :return: 
-        """
-
-    def fetch_data(self, collection, db=None, query={}, only_include_keys=[]):
-        """
-        function to fetch data from the given database and collection on given query
-        :param str db: db_name in mongo
-        :param str collection: collection name in mongo for database db
-        :param dict query: execution query statement; default is {} which means fetch all without any filters
-        :param list only_include_keys: list of keys to be included while fetching rows
-        :return: pd.DataFrame 
-        """
-            
-    def fetch_data_sorted(self, collection, db=None, pipeline=[]):
-        """
-        function to fetch data from the given database and collection on given query
-        :param str db: db_name in mongo
-        :param str collection: collection name in mongo for database db
-        :param list pipeline: pipeline required to aggregate
-        :return: pd.DataFrame 
-        """
-
-        
+```     
 ```
 ---
+	
+### 4.  BigQuery Connector<a id="BigQuery_Connector" name="BigQuery_Connector">
+    
+**Code Snippet Sample :**  
+```python
+
+# Fetching data from BigQuery
+from utilities.connector.bigquery import BigQuery
+bq = BigQuery(read_big_query_project = "****",
+                    service_account_file_path="***.json")
+query = "select * from `trellatale.trellDbDump.userLanguages` limit 2"
+df = bq.get_data(query)
+
+# Dumping Dataframe in BigQuery
+bq.dump_data(database="rahul_temp", table="demo", dataframe=df, mode="append")
+
+# Executing any query in BigQuery
+query = "INSERT rahul_temp.Demo (id, userId) VALUES(1,1),(1,1)"
+BigQuery.execute_query(query)
+
+# Streaming insert in BigQuery
+row_to_insert = [{"id": 1, "userid": 1, "languageId": 58,
+             "mode":0,"active":1}]
+BigQuery.insert_rows_in_bigquery(dataset="rahul_temp", table="Demo", rows_to_insert=row_to_insert)
+
+```
+    
+**BigQuery Connector Documentaion**
+```
+```
+---
+	
 	
 ## 2. Configurer    
 	
