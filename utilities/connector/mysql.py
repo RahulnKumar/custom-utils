@@ -1,3 +1,5 @@
+"""MySQL database utility functions"""
+
 import logging
 import sqlalchemy
 import pandas as pd
@@ -5,7 +7,6 @@ from utilities.exceptions import MysqlConnectionError, MysqlDataFetchError, Mysq
 
 
 class MySQL:
-
     """MySQL database utility functions"""
 
     def __init__(self, db_string):
@@ -17,7 +18,7 @@ class MySQL:
         try:
             self.connection = sqlalchemy.create_engine(db_string)
         except Exception as err:
-            raise MysqlConnectionError(err)
+            raise MysqlConnectionError(err) from err
 
 
     def get_data(self, query):
@@ -34,7 +35,7 @@ class MySQL:
             logging.debug("data fetched successfully")
             return data
         except Exception as err:
-            raise MysqlDataFetchError(err)
+            raise MysqlDataFetchError(err) from err
         finally:
             self.connection.dispose()
 
@@ -51,7 +52,7 @@ class MySQL:
             self.connection.execute(query)
             logging.debug("query executed successfully")
         except Exception as err:
-            raise MysqlGenericError(err)
+            raise MysqlGenericError(err) from err
         finally:
             self.connection.dispose()
 
@@ -71,13 +72,6 @@ class MySQL:
             data.to_sql(name=table_name, con=connection, if_exists=mode, index=False)
             logging.debug("data dumped successfully")
         except Exception as err:
-            raise MysqlGenericError(err)
+            raise MysqlGenericError(err) from err
         finally:
             connection.dispose()
-
-
-
-
-
-
-

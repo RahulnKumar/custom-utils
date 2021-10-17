@@ -1,21 +1,19 @@
-import sys
+"""Module containing bigQuery warehouse utility functions"""
+
 import time
 import logging
 import requests
-import traceback
 
 import pandas_gbq as gbq
 from google.cloud import bigquery
 from google.oauth2.service_account import Credentials
-from utilities.exceptions import BigQueryConnectionError, BigQueryDataFetchError, BigQueryGenericError
-
-from utilities import config
-
-
-
+from utilities.exceptions import (
+     BigQueryConnectionError,
+     BigQueryDataFetchError,
+     BigQueryGenericError
+     )
 
 class BigQuery:
-
     """BigQuery database utility functions"""
 
     def __init__(self, read_big_query_project ,
@@ -29,14 +27,15 @@ class BigQuery:
         :param str service_account_file_path: project specific BigQuery Credential
         """
 
-        self.READ_BIG_QUERY_PROJECT = read_big_query_project
-        self.WRITE_BIG_QUERY_PROJECT = write_big_query_project
+        self.read_big_query_project = read_big_query_project
+        self.write_big_query_project = write_big_query_project
 
         try:
             self.credentials = Credentials.from_service_account_file(service_account_file_path)
-            self.bq_client = bigquery.Client(credentials=self.credentials, project=self.credentials.project_id)
+            self.bq_client = bigquery.Client(credentials=self.credentials,
+                                             project=self.credentials.project_id)
         except Exception as err:
-            raise BigQueryConnectionError(err)
+            raise BigQueryConnectionError(err) from err
 
 
     def get_data(self, query=None, query_config=None, max_retries=0, time_interval=5):
@@ -50,26 +49,20 @@ class BigQuery:
         """
 
         flag = True
-        while (flag):
+        while flag is True:
             try:
-                if query:
-                    df = gbq.read_gbq(query=query, project_id=self.READ_BIG_QUERY_PROJECT,
-                                    configuration=query_config, credentials=self.credentials)
-                    logging.debug("Data fetched successfully")
-                    return df
-                else:
-                    raise Exception("Query is None")
-                flag = True
+                df = gbq.read_gbq(query=query, project_id=self.read_big_query_project,
+                                configuration=query_config, credentials=self.credentials)
+                logging.debug("Data fetched successfully")
+                return df
             except requests.exceptions.Timeout:
-                logging.info("readtimeot - - - - - - - - waiting for {} seconds".format(time_interval))
+                logging.info("readtimeot - - - waiting for {} seconds".format(time_interval))
                 max_retries = max_retries - 1
                 flag = False if max_retries <= 0 else True
                 time.sleep(time_interval)
             except Exception as err:
-                raise(BigQueryDataFetchError(err))
-                # logging.error(err)
-                # logging.info(traceback.format_exc())
                 flag = False
+                raise BigQueryDataFetchError(err) from err
 
     def execute_query(self, query, query_config=None, max_retries=0, time_interval=5):
 
@@ -83,20 +76,20 @@ class BigQuery:
 
 
         flag = True
-        while flag:
+        while flag is True:
             try:
                 query_job = self.bq_client.query(query, job_config=query_config)  # API request
                 query_job.result(timeout=900)  # Waits for statement to finish
                 logging.debug("------- Query Executed successfully ----- ")
                 flag = False
             except requests.exceptions.Timeout:
-                logging.info("readtimeot - - - - - - - - waiting for {} seconds".format(time_interval))
+                logging.info(f"readtimeot - - - - - - waiting for {time_interval} seconds")
                 max_retries = max_retries - 1
                 flag = False if max_retries <= 0 else True
                 time.sleep(time_interval)
             except Exception as err:
-                raise BigQueryGenericError(err)
                 flag = False
+                raise BigQueryGenericError(err) from err
 
 
     def dump_data(self, database=None, table=None, dataframe=None, mode="append"):
@@ -110,11 +103,13 @@ class BigQuery:
         """
 
         try:
-            gbq.to_gbq(dataframe, '{}.{}'.format(database, table), self.WRITE_BIG_QUERY_PROJECT, if_exists=mode,
-                    credentials=self.credentials)
+            gbq.to_gbq(dataframe,
+                       f'{database}.{table}',
+                       self.write_big_query_project,
+                       credentials=self.credentials, if_exists=mode)
             print("Appending Done")
         except Exception as err:
-            raise BigQueryGenericError(err)
+            raise BigQueryGenericError(err) from err
 
 
 
@@ -125,16 +120,16 @@ class BigQuery:
         Streaming insert into from BigQuery
         :param string dataset: target bigquery database
         :param string table: target table name
-        :param list rows_to_insert: list of dictionaries where each dictionary is a row with keys as column names
+        :param list rows_to_insert: list of dictionaries where each dictionary is a
+                                    row with keys as column names
         """
 
         try:
-            table = '{0}.{1}.{2}'.format(self.WRITE_BIG_QUERY_PROJECT, dataset, table)
-            rows_to_insert = rows_to_insert
+            table = f'{self.write_big_query_project}.{dataset}.{table}'
             errors = self.bq_client.insert_rows_json(table, rows_to_insert)
             assert errors == []
         except Exception as err:
-            raise BigQueryGenericError(err)
+            raise BigQueryGenericError(err) from err
 
 
     def insert_rows_in_bigquery(self, dataset=None, table=None, rows_to_insert=None):
@@ -143,11 +138,12 @@ class BigQuery:
         Streaming insert into from BigQuery
         :param string dataset: target bigquery database
         :param string table: target table name
-        :param  rows_to_insert: list of dictionaries where each dictionary is a row with keys as column names
+        :param  rows_to_insert: list of dictionaries where each dictionary is a
+                                row with keys as column names
         """
 
         try:
-            table_id = '{0}.{1}.{2}'.format(self.WRITE_BIG_QUERY_PROJECT, dataset, table)
+            table_id = f'{self.write_big_query_project}.{dataset}.{table}'
             table = self.bq_client.get_table(table_id)
             errors = self.bq_client.insert_rows(table, rows_to_insert)
             if not errors:
@@ -155,5 +151,4 @@ class BigQuery:
             else:
                 print("Failed adding rows", '\n', errors)
         except Exception as err:
-            raise BigQueryGenericError(err)
-
+            raise BigQueryGenericError(err) from err

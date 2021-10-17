@@ -1,3 +1,5 @@
+"""Module containing custom exception classes"""
+
 class BigQueryConnectionError(Exception):
     """Raised when data from bigQuery connection is failed"""
 

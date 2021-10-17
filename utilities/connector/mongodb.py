@@ -1,9 +1,11 @@
+""" Module containing mongodb utility functions"""
+
 import time
 import logging
 import pandas as pd
 from pymongo import MongoClient
 
-from utilities.exceptions import MongodbConnectionError, MongodbDataFetchError, MongodbGenericError
+from utilities.exceptions import MongodbConnectionError
 
 
 class MongoDB:
@@ -24,7 +26,7 @@ class MongoDB:
             self.client = MongoClient(self.uri)
             logging.debug("Mongo Connection set successfully ")
         except Exception as err:
-            raise MongodbConnectionError(err)
+            raise MongodbConnectionError(err) from err
 
 
     def push_data(self, data, collection, db=None):
@@ -32,14 +34,13 @@ class MongoDB:
         Function for inserting data into db
         :param str db : database name
         :param str collection : collection name
-        :param list/pd.DataFrame data : data to be inserted in the form of dataframe or list of dictionaries
+        :param list/pd.DataFrame data : data to be inserted in the form of
+                                        dataframe or list of dictionaries
         :return:
         """
 
-        if db==None:
+        if db is None:
             db = self.db
-        else:
-            db = db
 
         pushed = False
         while not pushed:
@@ -51,8 +52,8 @@ class MongoDB:
                 collection.insert_many(data_dict)
                 pushed = True
                 logging.debug("data pushed successfully ")
-            except Exception as e:
-                logging.error("Got Exception.. {}\nReconnecting.. Retrying..".format(str(e)))
+            except Exception as err:
+                logging.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
                 time.sleep(2)
                 self.client = MongoClient(self.uri)
 
@@ -65,10 +66,8 @@ class MongoDB:
         :return: pd.DataFrame
         """
 
-        if db==None:
+        if db is None:
             db = self.db
-        else:
-            db = db
 
         pulled = False
         while not pulled:
@@ -86,8 +85,8 @@ class MongoDB:
                 pulled = True
                 logging.debug("data pulled successfully")
                 return pd.DataFrame(data=data)
-            except Exception as e:
-                logging.error("Got Exception.. {}\nReconnecting.. Retrying..".format(str(e)))
+            except Exception as err:
+                logging.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
                 time.sleep(2)
                 self.client = MongoClient(self.uri)
 
@@ -103,10 +102,8 @@ class MongoDB:
         :return:
         """
 
-        if db==None:
+        if db is None:
             db = self.db
-        else:
-            db = db
 
         updated = False
         while not updated:
@@ -115,8 +112,8 @@ class MongoDB:
                 client_db[collection].update_many(id_dict, set_dict, upsert=upsert)
                 logging.debug("data updated successfully")
                 updated = True
-            except Exception as e:
-                logging.error("Got Exception.. {}\nReconnecting.. Retrying..".format(str(e)))
+            except Exception as err:
+                logging.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
                 time.sleep(1)
                 self.client = MongoClient(self.uri)
 
@@ -126,15 +123,14 @@ class MongoDB:
         Function for inserting data into db
         :param str db : database name
         :param str collection : collection name
-        :param dict output_json : list of dictionaries where each dictionary is a row with keys as column names
+        :param dict output_json : list of dictionaries where each dictionary is
+                                  a row with keys as column names
         :param list upsert_keys : keys to be upserted
         :return:
         """
 
-        if db==None:
+        if db is None:
             db = self.db
-        else:
-            db = db
 
         inserted = False
         while not inserted:
@@ -147,8 +143,8 @@ class MongoDB:
                     client_db[collection].replace_one(filter_query, record, upsert=True)
                 logging.debug("data inserted successfully")
                 inserted = True
-            except Exception as e:
-                logging.error("Got Exception.. {}\nReconnecting.. Retrying..".format(str(e)))
+            except Exception as err:
+                logging.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
                 time.sleep(1)
                 self.client = MongoClient(self.uri)
 
@@ -164,10 +160,8 @@ class MongoDB:
         :return:
         """
 
-        if db==None:
+        if db is None:
             db = self.db
-        else:
-            db = db
 
         deleted = False
         while not deleted:
@@ -180,24 +174,23 @@ class MongoDB:
                     client_db[collection].delete_many(condition_dict)
                 logging.debug("data deleted successfully")
                 deleted = True
-            except Exception as e:
-                logging.error("Got Exception.. {}\nReconnecting.. Retrying..".format(str(e)))
+            except Exception as err:
+                logging.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
                 time.sleep(1)
                 self.client = MongoClient(self.uri)
 
     def fetch_data(self, collection, db=None, query={}, only_include_keys=[]):
         """
         function to fetch data from the given database and collection on given query
-        :param str db: db_name in mongo
+        :param str db : db_name in mongo
         :param str collection: collection name in mongo for database db
-        :param dict query: execution query statement; default is {} which means fetch all without any filters
-        :param list only_include_keys: list of keys to be included while fetching rows
-        :return: pd.DataFrame 
+        :param dict query : execution query statement; default is {} which means fetch
+                           all without any filters
+        :param list only_include_keys : list of keys to be included while fetching rows
+        :return: pd.DataFrame
         """
-        if db==None:
+        if db is None:
             db = self.db
-        else:
-            db = db
 
         fetched = False
         while not fetched:
@@ -217,8 +210,8 @@ class MongoDB:
                 logging.debug("data fetched successfully")
                 fetched = True
                 return results
-            except Exception as e:
-                logging.error("Got Exception.. {}\nReconnecting.. Retrying..".format(str(e)))
+            except Exception as err:
+                logging.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
                 time.sleep(1)
                 self.client = MongoClient(self.uri)
 
@@ -231,24 +224,20 @@ class MongoDB:
         :return: pd.DataFrame
         """
 
-        if db==None:
+        if db is None:
             db = self.db
-        else:
-            db = db
 
         fetched = False
         while not fetched:
             try:
-                results = list()
+                results = []
                 client_db = self.client[db]
-                all_collection_names = client_db.collection_names()
-                # collection exists
                 client_collection = client_db[collection]
                 results = client_collection.aggregate(pipeline=pipeline)
                 fetched = True
                 logging.debug("data fetched successfully")
                 return results
-            except Exception as e:
-                logging.error("Got Exception.. {}\nReconnecting.. Retrying..".format(str(e)))
+            except Exception as err:
+                logging.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
                 time.sleep(1)
                 self.client = MongoClient(self.uri)

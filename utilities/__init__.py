@@ -1,3 +1,4 @@
+"""initialization script for the pip package"""
 import dotenv
 
 dotenv_path = dotenv.find_dotenv('.secret.env')

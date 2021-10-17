@@ -1,6 +1,9 @@
+"""Module containing log formatter and crendials setup tools"""
+
 import os
 import json
 import logging
+import traceback
 from datetime import datetime
 
 
@@ -25,7 +28,7 @@ class LogFormatter(logging.Formatter):
         logging.basicConfig(format=log_format, level=level, datefmt=LogFormatter.__date_format)
         if len(logging.root.handlers) > 0:
             logging.root.handlers[0].setFormatter(LogFormatter(fmt=log_format,
-                                                                      datefmt=LogFormatter.__date_format))
+                                                  datefmt=LogFormatter.__date_format))
 
     def formatException(self, execution_info):
         """
@@ -51,18 +54,18 @@ class Credential:
     """ sets aws access key and secret key as environment variables """
 
     @staticmethod
-    def set(ACCESS_KEY, SECRET_KEY):
+    def set(access_key, secret_key):
 
         """
         sets aws access key and secret key as environment variables
-        :param string ACCESS_KEY:  this is aws_access_key_id 
+        :param string ACCESS_KEY:  this is aws_access_key_id
         :param string SECRET_KEY: this is aws_secret_access_key
         :return None
         """
 
         try:
-            os.environ["ACCESS_KEY"] = ACCESS_KEY
-            os.environ["SECRET_KEY"] = SECRET_KEY
+            os.environ["ACCESS_KEY"] = access_key
+            os.environ["SECRET_KEY"] = secret_key
             print("----- Environment Variables set successfully -----")
         except:
             print(" Something went wrong while setting environment variables")
