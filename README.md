@@ -46,7 +46,7 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 
 **Code Snippet Sample :**
 ```python
-from utilities.connector.S3 import S3
+from utilities.connector.s3 import S3
 
 # Uplaoding data to S3
 demo = {"Name": "Trell", "Age": 4}
@@ -64,6 +64,31 @@ demo = S3.read_from_s3_bucket(bucket='data-science-datas',
 **S3 Connector Documentation**
     
 ```
+class S3(builtins.object)
+ |  AWS S3 utility functions
+ |  
+ |  Static methods defined here:
+ |  
+ |  read_from_s3_bucket(bucket, sub_bucket, file_name)
+ |      read data stored in S3 bucket
+ |      :param string bucket: bucket name
+ |      :param string sub_bucket: sub-bucket name
+ |      :param string file_name: name of the file to be read
+ |      :return old_data : python object stored in the S3
+ |  
+ |  upload_data_from_local_to_s3(model_file_name, bucket, sub_bucket)
+ |      write data stored in local machine into S3 bucket from
+ |      :param string bucket: bucket name
+ |      :param string sub_bucket: sub-bucket name
+ |      :param string file_name: name of the file to be written
+ |      :return None
+ |  
+ |  write_to_s3_bucket(python_data_object, bucket, sub_bucket, file_name)
+ |      write python objects/variables etc  into S3 bucket
+ |      :param string bucket: bucket name
+ |      :param string sub_bucket: sub-bucket name
+ |      :param string file_name: name of the file to be written
+ |      :return None
 ```
 ---
     
@@ -89,6 +114,33 @@ df = mysql.get_data(query = query)
     
 **MySQL Connector Documentaion**
 ```
+class MySQL(builtins.object)
+ |  MySQL(db_string)
+ |  
+ |  MySQL database utility functions
+ |  
+ |  Methods defined here:
+ |  
+ |  __init__(self, db_string)
+ |      initialisation method for MySQL Connector
+ |      :param string db_string: mysql database connection string
+ |  
+ |  dump_data(self, data, table_name, mode='append')
+ |      Execute a query in the mysql table
+ |      :param pd.DataFrame data: dataframe to be appended or replaced
+ |      :param string table_name: name of the the target table
+ |      :param string mode: it can be either replace or append
+ |      :return None
+ |  
+ |  execute_query(self, query)
+ |      Execute a query in the mysql table
+ |      :param string query: query for execution in the table
+ |      :return :
+ |  
+ |  get_data(self, query)
+ |      Fetch data from mysql as a dataframe.
+ |      :param string query: query for fetching data from table
+ |      :return pd.DataFrame data
 ```
     
 ---
@@ -125,7 +177,77 @@ mongo.delete_data(collection=collection, overall=False, condition_dict= {"id":No
 ```
 
  **MongoDB Connector Documentaion**
-```     
+```    
+class MongoDB(builtins.object)
+ |  MongoDB(db=None, uri=None)
+ |  
+ |  MongoDB utility functions.
+ |  
+ |  Methods defined here:
+ |  
+ |  __init__(self, db=None, uri=None)
+ |      initialisation method for MongoDB connector
+ |      :param str db: database name
+ |      :param str uri: mongo uri string for establishing connection
+ |  
+ |  delete_data(self, collection, db=None, overall=False, condition_dict=None)
+ |      Function for inserting data into db
+ |      :param str db : database name
+ |      :param str collection : collection name
+ |      :param bool overall : delete whole collection if True
+ |      :param dict condition_dict : query for deletion
+ |      :return:
+ |  
+ |  fetch_data(self, collection, db=None, query={}, only_include_keys=[])
+ |      function to fetch data from the given database and collection on given query
+ |      :param str db : db_name in mongo
+ |      :param str collection: collection name in mongo for database db
+ |      :param dict query : execution query statement; default is {} which means fetch
+ |                         all without any filters
+ |      :param list only_include_keys : list of keys to be included while fetching rows
+ |      :return: pd.DataFrame
+ |  
+ |  fetch_data_sorted(self, collection, db=None, pipeline=[])
+ |      function to fetch data from the given database and collection on given query
+ |      :param str db: db_name in mongo
+ |      :param str collection: collection name in mongo for database db
+ |      :param list pipeline: pipeline required to aggregate
+ |      :return: pd.DataFrame
+ |  
+ |  pull_data(self, list_dict, collection, db=None)
+ |      Function for inserting data into db
+ |      :param str db : database name
+ |      :param str collection : collection name
+ |      :param list list_dict : query for fetching data
+ |      :return: pd.DataFrame
+ |  
+ |  push_data(self, data, collection, db=None)
+ |      Function for inserting data into db
+ |      :param str db : database name
+ |      :param str collection : collection name
+ |      :param list/pd.DataFrame data : data to be inserted in the form of
+ |                                      dataframe or list of dictionaries
+ |      :return:
+ |  
+ |  update_value(self, id_dict, set_dict, collection, db=None, upsert=None)
+ |      Function for updating data into db
+ |      :param str db : database name
+ |      :param str collection : collection name
+ |      :param dict id_dict : query for updation
+ |      :param dict set_dict : key and value dictionary to be updated
+ |      :param bool upsert : whether to upsert or just update
+ |      :return:
+ |  
+ |  upsert_json(self, output_json, upsert_keys, collection, db=None)
+ |      Function for inserting data into db
+ |      :param str db : database name
+ |      :param str collection : collection name
+ |      :param dict output_json : list of dictionaries where each dictionary is
+ |                                a row with keys as column names
+ |      :param list upsert_keys : keys to be upserted
+ |      :return:
+ |  
+ |  ----------------------------------------------------------------------
 ```
 ---
 	
