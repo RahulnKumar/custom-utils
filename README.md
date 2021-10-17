@@ -31,7 +31,9 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 ## 1.  Installation<a id="Installation" name="Installation">    
 
 - **Installation** (Any one)      
-    `pip install utilities`  
+    `pip install utilities`  --> minimal installation  
+    `pip install utilities[full]` --> full installation  
+    `pip install utilities[s3,mysql,bigquery,mongodb]`  --> selective installation  
     `pip install git+https://github.com/rahulnkumar/utilities.git`  
     `pip install git+https://github.com/rahulnkumar/utilities.git@<tag_no>`  
     `pip install git+https://github.com/rahulnkumar/utilities.git@<branch_name>`    
