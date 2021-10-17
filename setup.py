@@ -1,8 +1,7 @@
 """Setup for the utilities package."""
 
 from itertools import chain
-import setuptools
-
+from setuptools import setup, find_packages
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -18,7 +17,7 @@ EXTRAS_REQUIRE = {
 # construct special 'full' extra that adds requirements for all built-in
 EXTRAS_REQUIRE['full'] = list(set(chain(*EXTRAS_REQUIRE.values())))
 
-setuptools.setup(
+setup(
     author="Rahul Kumar",
     author_email="rahulnkumar7@gmail.com",
     name='utilities',
@@ -27,7 +26,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/RahulnKumar/utilities',
-    packages=setuptools.find_packages(),
+    packages=find_packages(),
     python_requires=">=3.6.9",
     install_requires=['requests', 'json-utils', 'python-dotenv', 'subprocess32', 'psutil',],
     extras_require=EXTRAS_REQUIRE,
