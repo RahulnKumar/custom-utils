@@ -6,7 +6,9 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 
 <p float="left">
   <img src=https://img.shields.io/pypi/v/custom-utils />
+  <img src=https://www.code-inspector.com/project/29426/score/svg />
   <img src=https://img.shields.io/pypi/dm/custom-utils?logo=Python&style=social /> 
+  <a href="https://github.com/RahulnKumar/custom-utils/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/RahulnKumar/custom-utils"></a>
 </p>
  
 
