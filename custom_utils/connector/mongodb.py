@@ -1,10 +1,9 @@
 """ Module containing mongodb utility functions"""
 
 import time
-import logging
 import pandas as pd
 from pymongo import MongoClient
-
+from custom_utils.configurer import logger
 from custom_utils.exceptions import MongodbConnectionError
 
 
@@ -24,7 +23,7 @@ class MongoDB:
         self.uri = uri
         try:
             self.client = MongoClient(self.uri)
-            logging.debug("Mongo Connection set successfully ")
+            logger.debug("Mongo Connection set successfully ")
         except Exception as err:
             raise MongodbConnectionError(err) from err
 
@@ -51,9 +50,9 @@ class MongoDB:
                     data_dict = data.to_dict("records")
                 collection.insert_many(data_dict)
                 pushed = True
-                logging.debug("data pushed successfully ")
+                logger.debug("data pushed successfully ")
             except Exception as err:
-                logging.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
+                logger.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
                 time.sleep(2)
                 self.client = MongoClient(self.uri)
 
@@ -83,10 +82,10 @@ class MongoDB:
                         for j in collection.find(i):
                             data.append(j)
                 pulled = True
-                logging.debug("data pulled successfully")
+                logger.debug("data pulled successfully")
                 return pd.DataFrame(data=data)
             except Exception as err:
-                logging.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
+                logger.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
                 time.sleep(2)
                 self.client = MongoClient(self.uri)
 
@@ -110,10 +109,10 @@ class MongoDB:
             try:
                 client_db = self.client[db]
                 client_db[collection].update_many(id_dict, set_dict, upsert=upsert)
-                logging.debug("data updated successfully")
+                logger.debug("data updated successfully")
                 updated = True
             except Exception as err:
-                logging.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
+                logger.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
                 time.sleep(1)
                 self.client = MongoClient(self.uri)
 
@@ -141,10 +140,10 @@ class MongoDB:
                     for filter_key in upsert_keys:
                         filter_query[filter_key] = record[filter_key]
                     client_db[collection].replace_one(filter_query, record, upsert=True)
-                logging.debug("data inserted successfully")
+                logger.debug("data inserted successfully")
                 inserted = True
             except Exception as err:
-                logging.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
+                logger.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
                 time.sleep(1)
                 self.client = MongoClient(self.uri)
 
@@ -172,10 +171,10 @@ class MongoDB:
                     print('Overall data deleted.')
                 else:
                     client_db[collection].delete_many(condition_dict)
-                logging.debug("data deleted successfully")
+                logger.debug("data deleted successfully")
                 deleted = True
             except Exception as err:
-                logging.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
+                logger.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
                 time.sleep(1)
                 self.client = MongoClient(self.uri)
 
@@ -207,11 +206,11 @@ class MongoDB:
                     cursor = client_db[collection]
                     for row in cursor.find(query, projections):
                         results.append(row)
-                logging.debug("data fetched successfully")
+                logger.debug("data fetched successfully")
                 fetched = True
                 return results
             except Exception as err:
-                logging.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
+                logger.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
                 time.sleep(1)
                 self.client = MongoClient(self.uri)
 
@@ -235,9 +234,9 @@ class MongoDB:
                 client_collection = client_db[collection]
                 results = client_collection.aggregate(pipeline=pipeline)
                 fetched = True
-                logging.debug("data fetched successfully")
+                logger.debug("data fetched successfully")
                 return results
             except Exception as err:
-                logging.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
+                logger.error(f"Got Exception.. {err}\nReconnecting.. Retrying..")
                 time.sleep(1)
                 self.client = MongoClient(self.uri)

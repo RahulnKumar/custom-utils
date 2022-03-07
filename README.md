@@ -306,10 +306,11 @@ class BigQuery(builtins.object)
  |      :param pd.DataFrame dataframe: pandas dataframe for dumping into bigquery
  |      :param string mode: it can be either append or replace
  |  
- |  execute_query(self, query, query_config=None, max_retries=0, time_interval=5)
+ |  execute_query(self, query, query_config=None, timeout=900, max_retries=0, time_interval=5)
  |      Executes query from from BigQuery table
  |      :param string query: query for execution
  |      :param string query_cofig: config for parameterised query
+ |      :param integer timeout : maximum bigquery execution timeout
  |      :param string max_retries: maximum retries if data is not fetched
  |      :param integer time_interval : time interval between retries
  |  

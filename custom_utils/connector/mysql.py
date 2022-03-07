@@ -3,6 +3,7 @@
 import logging
 import sqlalchemy
 import pandas as pd
+from custom_utils.configurer import logger
 from custom_utils.exceptions import MysqlConnectionError, MysqlDataFetchError, MysqlGenericError
 
 
@@ -21,7 +22,7 @@ class MySQL:
             raise MysqlConnectionError(err) from err
 
 
-    def get_data(self, query):
+    def pull_data(self, query):
 
         """
         Fetch data from mysql as a dataframe.
@@ -56,7 +57,7 @@ class MySQL:
         finally:
             self.connection.dispose()
 
-    def dump_data(self, data, table_name, mode="append"):
+    def push_data(self, data, table_name, mode="append"):
 
         """
         Execute a query in the mysql table

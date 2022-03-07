@@ -6,6 +6,10 @@ import logging
 import traceback
 from datetime import datetime
 
+logging.basicConfig(format='%(asctime)s  %(levelname)s--> %(message)s',
+                    datefmt='%d/%b/%Y %H:%M:%S %p %Z', level=logging.INFO)
+logger = logging.getLogger('trell_logger')
+
 
 class LogFormatter(logging.Formatter):
     """Log Formatter class """
@@ -66,7 +70,7 @@ class Credential:
         try:
             os.environ["ACCESS_KEY"] = access_key
             os.environ["SECRET_KEY"] = secret_key
-            print("----- Environment Variables set successfully -----")
+            logger.info("----- Environment Variables set successfully -----")
         except:
-            print(" Something went wrong while setting environment variables")
+            logger.error(" Something went wrong while setting environment variables")
             traceback.print_exc()
