@@ -111,7 +111,7 @@ database = "***"
 db_string = f"mysql+mysqlconnector://{user}:{password}@{host}:{port}/{database}"
 query = "select * from table_name limit 10"
 mysql = MySQL(db_string=db_string)
-df = mysql.get_data(query = query) 
+df = mysql.pull_data(query = query) 
 ```
     
 **MySQL Connector Documentaion**
@@ -127,7 +127,7 @@ class MySQL(builtins.object)
  |      initialisation method for MySQL Connector
  |      :param string db_string: mysql database connection string
  |  
- |  dump_data(self, data, table_name, mode='append')
+ |  push_data(self, data, table_name, mode='append')
  |      Execute a query in the mysql table
  |      :param pd.DataFrame data: dataframe to be appended or replaced
  |      :param string table_name: name of the the target table
@@ -139,7 +139,7 @@ class MySQL(builtins.object)
  |      :param string query: query for execution in the table
  |      :return :
  |  
- |  get_data(self, query)
+ |  pull_data(self, query)
  |      Fetch data from mysql as a dataframe.
  |      :param string query: query for fetching data from table
  |      :return pd.DataFrame data
@@ -165,7 +165,7 @@ data =  mongo.pull_data(collection=collection, list_dict=list_dict)
 query = {'id': {'$in': [1,2]}}
 data = mongo.fetch_data(collection, query=query, only_include_keys=["name"])
 
-#Writing inot MongoDB
+#Writing into MongoDB
 mongo.push_data(collection = collection, data = data)
 
 #Updating value
@@ -262,11 +262,11 @@ class MongoDB(builtins.object)
 from custom_utils.connector.bigquery import BigQuery
 bq = BigQuery(read_big_query_project = "****",
                     service_account_file_path="***.json")
-query = "select * from `trellatale.trellDbDump.userLanguages` limit 2"
-df = bq.get_data(query)
+query = "select * from table_name"
+df = bq.pull_data(query)
 
 # Dumping Dataframe in BigQuery
-bq.dump_data(database="rahul_temp", table="demo", dataframe=df, mode="append")
+bq.push_data(database="rahul_temp", table="demo", dataframe=df, mode="append")
 
 # Executing any query in BigQuery
 query = "INSERT rahul_temp.Demo (id, userId) VALUES(1,1),(1,1)"
@@ -294,14 +294,14 @@ class BigQuery(builtins.object)
  |      :param str write_big_query_project: project used while writing into BigQuery
  |      :param str service_account_file_path: project specific BigQuery Credential
  |  
- |  dump_data(self, database=None, table=None, dataframe=None, mode='append')
+ |  push_data(self, database=None, table=None, dataframe=None, mode='append')
  |      Dumps data into from BigQuery
  |      :param string database: target bigquery database
  |      :param string table: target table name
  |      :param pd.DataFrame dataframe: pandas dataframe for dumping into bigquery
  |      :param string mode: it can be either append or replace
  |  
- |  execute_query(self, query, query_config=None, timeout=900, max_retries=0, time_interval=5)
+ |  execute_query(self, query, job_config=None, timeout=900, max_retries=0, time_interval=5)
  |      Executes query from from BigQuery table
  |      :param string query: query for execution
  |      :param string query_cofig: config for parameterised query
@@ -309,7 +309,7 @@ class BigQuery(builtins.object)
  |      :param string max_retries: maximum retries if data is not fetched
  |      :param integer time_interval : time interval between retries
  |  
- |  get_data(self, query=None, query_config=None, max_retries=0, time_interval=5)
+ |  pull_data(self, query=None, job_config=None, max_retries=0, time_interval=5)
  |      Fetches data from from BigQuery
  |      :param string query: query for fetching data from table
  |      :param string query_cofig: config for parameterised query
