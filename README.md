@@ -373,7 +373,7 @@ LogFormatter.apply()
 **Log Formatter Documentation**
 ```
 class LogFormatter(logging.Formatter):
-    """Log Formatter class for trell ai usage"""
+    """Log Formatter class for custom-utils package"""
 
     __date_format = '%d/%b/%Y:%H:%M:%S %Z'
 
