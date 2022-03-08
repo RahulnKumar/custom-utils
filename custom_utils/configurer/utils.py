@@ -8,7 +8,7 @@ from datetime import datetime
 
 logging.basicConfig(format='%(asctime)s  %(levelname)s--> %(message)s',
                     datefmt='%d/%b/%Y %H:%M:%S %p %Z', level=logging.INFO)
-logger = logging.getLogger('trell_logger')
+logger = logging.getLogger('custom_logger')
 
 
 class LogFormatter(logging.Formatter):
