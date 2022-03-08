@@ -56,16 +56,10 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 from custom_utils.connector.s3 import S3
 
 # Uplaoding data to S3
-demo = {"Name": "Trell", "Age": 4}
-S3.write_to_s3_bucket(python_data_object=demo,
-                             bucket='data-science-datas',
-                             sub_bucket='models/', file_name="demo.pickle")
+S3.push_data(python_data_object, bucket, sub_bucket, file_name)
                              
 # Doownlaoding data from S3
-
-demo = S3.read_from_s3_bucket(bucket='data-science-datas',          
-                                         sub_bucket='models/',
-                                         file_name="demo.pickle")
+data = S3.pull_data(bucket, sub_bucket, file_name)
 ```
 
 **S3 Connector Documentation**
@@ -76,26 +70,27 @@ class S3(builtins.object)
  |  
  |  Static methods defined here:
  |  
- |  read_from_s3_bucket(bucket, sub_bucket, file_name)
+ |  pull_data(bucket, sub_bucket, file_name)
  |      read data stored in S3 bucket
  |      :param string bucket: bucket name
  |      :param string sub_bucket: sub-bucket name
  |      :param string file_name: name of the file to be read
  |      :return old_data : python object stored in the S3
- |  
- |  upload_data_from_local_to_s3(model_file_name, bucket, sub_bucket)
- |      write data stored in local machine into S3 bucket from
- |      :param string bucket: bucket name
- |      :param string sub_bucket: sub-bucket name
- |      :param string file_name: name of the file to be written
- |      :return None
- |  
- |  write_to_s3_bucket(python_data_object, bucket, sub_bucket, file_name)
+ | 
+ |  push_data(python_data_object, bucket, sub_bucket, file_name)
  |      write python objects/variables etc  into S3 bucket
  |      :param string bucket: bucket name
  |      :param string sub_bucket: sub-bucket name
  |      :param string file_name: name of the file to be written
  |      :return None
+ |  
+ |  push_local_data(model_file_name, bucket, sub_bucket)
+ |      write data stored in local machine into S3 bucket from
+ |      :param string bucket: bucket name
+ |      :param string sub_bucket: sub-bucket name
+ |      :param string file_name: name of the file to be written
+ |      :return None
+  
 ```
 ---
     
