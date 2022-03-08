@@ -6,7 +6,7 @@ import subprocess
 from io import BytesIO
 import joblib
 import boto3
-from custom_utils.configurer import logger
+from custom_utils.configurer.utils import logger
 
 class S3:
     """AWS S3 utility functions"""

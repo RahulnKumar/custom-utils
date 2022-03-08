@@ -3,7 +3,7 @@
 import time
 import pandas as pd
 from pymongo import MongoClient
-from custom_utils.configurer import logger
+from custom_utils.configurer.utils import logger
 from custom_utils.exceptions import MongodbConnectionError
 
 
