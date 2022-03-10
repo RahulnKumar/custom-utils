@@ -47,7 +47,7 @@ class S3:
         :return None
         """
 
-        key = f'{sub_bucket}{file_name}'
+        key = f'{sub_bucket}/{file_name}'
         compress = ('gzip', 3)
         try:
             s3 = boto3.resource('s3', aws_access_key_id=os.environ['ACCESS_KEY'],
