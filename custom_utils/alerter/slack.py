@@ -6,7 +6,7 @@ import traceback
 import psutil
 import requests
 
-class Alerter:
+class Slack:
     """Class for sending alerts and monitoring stats to a slack channel"""
 
     @staticmethod
