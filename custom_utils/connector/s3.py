@@ -6,22 +6,23 @@ import subprocess
 from io import BytesIO
 import joblib
 import boto3
+import pandas as pd
+from smart_open import smart_open
 from custom_utils.configurer.utils import logger
 
 class S3:
     """AWS S3 utility functions"""
 
     @staticmethod
-    def pull_data(bucket, sub_bucket, file_name):
+    def pull_python_object(s3_uri):
         """
-        read data stored in S3 bucket
-        :param string bucket: bucket name
-        :param string sub_bucket: sub-bucket name
-        :param string file_name: name of the file to be read
-        :return old_data : python object stored in the S3
+        read python object stored in S3 bucket
+        :param string s3_uri: s3 uri of the object
+        :return python_object : python object stored in the S3
         """
 
-        key = f"{sub_bucket}/{file_name}"
+        bucket, key = s3_uri[5:].split('/', 1)
+        print(bucket, key)
         try:
             s3 = boto3.resource('s3', aws_access_key_id=os.environ['ACCESS_KEY'],
                                       aws_secret_access_key=os.environ['SECRET_KEY'])
@@ -33,12 +34,11 @@ class S3:
         with BytesIO() as data:
             s3.Bucket(bucket).download_fileobj(key, data)
             data.seek(0)
-            old_data = joblib.load(data)
-        return old_data
-
+            python_object = joblib.load(data)
+        return python_object
 
     @staticmethod
-    def push_data(python_data_object, bucket, sub_bucket, file_name):
+    def push_python_object(python_object, s3_uri):
         """
         write python objects/variables etc  into S3 bucket
         :param string bucket: bucket name
@@ -47,7 +47,7 @@ class S3:
         :return None
         """
 
-        key = f'{sub_bucket}/{file_name}'
+        bucket, key = s3_uri[5:].split('/', 1)
         compress = ('gzip', 3)
         try:
             s3 = boto3.resource('s3', aws_access_key_id=os.environ['ACCESS_KEY'],
@@ -59,36 +59,77 @@ class S3:
 
         logger.info(f"Writing data to S3 path : {bucket}/{key}")
         with tempfile.TemporaryFile() as data:
-                    joblib.dump(python_data_object, data, compress=compress)
+                    joblib.dump(python_object, data, compress=compress)
                     data.seek(0)
                     s3.Bucket(bucket).upload_fileobj(data, key)
 
-
     @staticmethod
-    def push_local_data(file_path, bucket, sub_bucket):
+    def push_local_data(file_path, s3_uri):
 
         """
         write data stored in local machine into S3 bucket from
-        :param string bucket: bucket name
-        :param string sub_bucket: sub-bucket name
-        :param string file_path: path of the file to be written
+        :param string s3_uri: target s3 uri
+        :param string file_path:  local path of the file 
         :return None
         """
 
         try:
-            destination_s3_path =  f"s3://{bucket}/{sub_bucket}"
-            logger.debug("Pushing data in S3 at {destination_s3_path}")
-            upload_command = f"aws s3 cp  {file_path} {destination_s3_path}"
+            logger.debug("Pushing data in S3 at {s3_uri}")
+            upload_command = f"aws s3 cp  {file_path} {s3_uri}"
             upload_command_array = upload_command.split()
             p = subprocess.Popen(upload_command_array,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.STDOUT)
-            while True:
-                retcode = p.poll()
-                line = p.stdout.readline()
-                if retcode is not None:
-                    os.remove(file_path)
-                    logger.debug(f"Removing file name: {file_path}")
-                    break
         except Exception as err:
             logger.error(err)
+
+    @staticmethod
+    def pull_s3_data(file_path, s3_uri):
+
+        """
+        write data stored in local machine into S3 bucket from
+        :param string s3_uri: target s3 uri
+        :param string file_path:  local path of the file 
+        :return None
+        """
+
+        try:
+            logger.debug("Pushing data in S3 at {s3_uri}")
+            download_command = f"aws s3 cp {s3_uri} {file_path}"
+            download_command_array = download_command.split()
+            p = subprocess.Popen(download_command_array,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.STDOUT)
+        except Exception as err:
+            logger.error(err)
+
+    @staticmethod
+    def read_csv(s3_uri):
+         """
+        write data stored in local machine into S3 bucket from
+        :param string s3_uri: csv file S3 URI
+        :return df : pandas dataframe
+        """
+         try:
+              df = pd.read_csv(smart_open(s3_uri))
+              return df
+         except Exception as err:
+              logger.error(err)
+
+    @staticmethod
+    def run_cli_command(command):
+         """
+        Run S3 CLI
+        :param string command: command to run
+        :return output : output of the command
+        """
+         try:
+            cli_cmd = command.split()
+            p = subprocess.Popen(cli_cmd,
+                                  stdout=subprocess.PIPE,
+                                  stderr=subprocess.STDOUT)
+            output, _ = p.communicate()
+            output = output.decode('utf-8')
+            return output
+         except Exception as err:
+              logger.error(err)
