@@ -30,7 +30,7 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 
 ***
 
-## 1.  Installation<a id="1--installation" name="Installation">    
+## 1.  Installation<a id="1--installation">    
 
 - **Installation from Pypi repository** (Any one)
 	
@@ -46,7 +46,7 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 ---
     
 	
-## 2. Connector<a id="2-connector" name="Connector">
+## 2. Connector<a id="2-connector">
 
     
 ### 1. S3 Connector<a id="1-s3-connector">     
@@ -117,7 +117,7 @@ class S3(builtins.object)
 
 ---
    
-### 2. MySQL Connector<a id="MySQL_Connector" name="MySQL_Connector">  
+### 2. MySQL Connector<a id="2-mysql-connector">  
   
 **Code Snippet Sample :**  
 ```python
@@ -168,7 +168,7 @@ class MySQL(builtins.object)
 ---
     
     
-### 3.  MongoDB Connector<a id="MongoDB_Connector" name="MongoDB_Connector">
+### 3.  MongoDB Connector<a id="3--mongodb-connector">
     
 **Code Snippet Sample :**  
 ```python
@@ -273,7 +273,7 @@ class MongoDB(builtins.object)
 ```
 ---
 	
-### 4.  BigQuery Connector<a id="BigQuery_Connector" name="BigQuery_Connector">
+### 4.  BigQuery Connector<a id="4--bigquery-connector">
     
 **Code Snippet Sample :**  
 ```python
@@ -353,9 +353,9 @@ class BigQuery(builtins.object)
 ---
 	
 	
-## 3. Configurer<a id="Configurer" name="Configurer">   
+## 3. Configurer<a id="3-configurer">   
 	
-### 1. Profile Decorator<a id="Profile_Decorator" name="Profile_Decorator">    
+### 1. Profile Decorator<a id="1-profile-decorator">    
     
 **Code Snippet Sample :**  
 ```python
@@ -382,7 +382,7 @@ def profiler(output_file=None, sort_by='cumulative', lines_to_print=None, strip_
     :return: Profile of the decorated function
     """
 ```
-###  2.  Log Formatter<a id="Log_Formatter" name="Log_Formatter">
+###  2.  Log Formatter<a id="2--log-formatter">
  
 **Code Snippet Sample :**
 ```python
@@ -406,9 +406,9 @@ class LogFormatter(logging.Formatter):
 ---
 	
 	
-## 4. Alerter<a id="Alerter" name="Alerter">    
+## 4. Alerter<a id="4-alerter">    
 	
-###  1.  Slack Alerter<a id="Slack_Alerter" name="Slack_Alerter">  
+###  1.  Slack Alerter<a id="1--slack-alerter">  
     
     
 **Code Snippet Sample :**
