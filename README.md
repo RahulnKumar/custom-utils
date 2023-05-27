@@ -43,7 +43,7 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
     `pip install git+https://github.com/rahulnkumar/custom-utils.git@<tag_no>`  
     `pip install git+https://github.com/rahulnkumar/custom-utils.git@<branch_name>`    
 
-<img src="https://i.ibb.co/7kTKdYS/pip-cu.gif" alt="pip-cu" border="0">
+<img src="https://i.ibb.co/9wkH9tD/pip-cu.gif" alt="pip-cu" border="0">
     
 ---
     
