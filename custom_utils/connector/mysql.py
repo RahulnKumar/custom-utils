@@ -1,6 +1,5 @@
 """MySQL database utility functions"""
 
-import logging
 import sqlalchemy
 import pandas as pd
 from custom_utils.configurer.utils import logger
@@ -33,7 +32,7 @@ class MySQL:
 
         try:
             data = pd.read_sql(query + " ;", self.connection)
-            logging.debug("data fetched successfully")
+            logger.debug("data fetched successfully")
             return data
         except Exception as err:
             raise MysqlDataFetchError(err) from err
@@ -51,7 +50,7 @@ class MySQL:
 
         try:
             self.connection.execute(query)
-            logging.debug("query executed successfully")
+            logger.debug("query executed successfully")
         except Exception as err:
             raise MysqlGenericError(err) from err
         finally:
@@ -71,7 +70,7 @@ class MySQL:
         try:
             connection = self.connection
             data.to_sql(name=table_name, con=connection, if_exists=mode, index=False)
-            logging.debug("data dumped successfully")
+            logger.debug("data dumped successfully")
         except Exception as err:
             raise MysqlGenericError(err) from err
         finally:
