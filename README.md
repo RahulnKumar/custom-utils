@@ -14,19 +14,19 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 
 ## Table of Contents
 
-- [Installation](#Installation)
-- [Connector](#Connector)
-  - [S3 Connector](#S3_Connector)
-  - [MySQL Connector](#MySQL_Connector)
-  - [MongoDB Connector](#MongoDB_Connector)
-  - [BigQuery Connector](#BigQuery_Connector)
- 
-- [Configurer](#Configurer)
-  - [Log Formatter](#Log_Formatter)
-  - [Profile Decorator](#Profile_Decorator)
-  
-- [Alerter](#Alerter)
-  - [Slack Alerter](#Slack_Alerter)
+- [custom-utils](#custom-utils)
+  - [Table of Contents](#table-of-contents)
+  - [1.  Installation](#1--installation)
+  - [2. Connector](#2-connector)
+    - [1. S3 Connector](#1-s3-connector)
+    - [2. MySQL Connector](#2-mysql-connector)
+    - [3.  MongoDB Connector](#3--mongodb-connector)
+    - [4.  BigQuery Connector](#4--bigquery-connector)
+  - [3. Configurer](#3-configurer)
+    - [1. Profile Decorator](#1-profile-decorator)
+    - [2.  Log Formatter](#2--log-formatter)
+  - [4. Alerter](#4-alerter)
+    - [1.  Slack Alerter](#1--slack-alerter)
 
 ***
 
@@ -53,6 +53,11 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 
 **Code Snippet Sample :**
 ```python
+## Setup Credentials :
+from custom_utils.configurer.utils import Credential
+Credential.set(ACCESS_KEY="*********", SECRET_KEY="*********")
+
+
 from custom_utils.connector.s3 import S3
 
 # Uplaoding data to S3
@@ -70,26 +75,36 @@ class S3(builtins.object)
  |  
  |  Static methods defined here:
  |  
- |  pull_data(bucket, sub_bucket, file_name)
- |      read data stored in S3 bucket
- |      :param string bucket: bucket name
- |      :param string sub_bucket: sub-bucket name
- |      :param string file_name: name of the file to be read
- |      :return old_data : python object stored in the S3
- | 
- |  push_data(python_data_object, bucket, sub_bucket, file_name)
+ |  pull_python_object(s3_uri)
+ |      read python object stored in S3 bucket
+ |      :param string s3_uri: s3 uri of the object
+ |      :return python_object : python object stored in the S3
+ |  
+ |  pull_s3_data(file_path, s3_uri)
+ |      write data stored in local machine into S3 bucket from
+ |      :param string s3_uri: target s3 uri
+ |      :param string file_path:  local path of the file 
+ |      :return None
+ |  
+ |  push_local_data(file_path, s3_uri)
+ |      write data stored in local machine into S3 bucket from
+ |      :param string s3_uri: target s3 uri
+ |      :param string file_path:  local path of the file 
+ |      :return None
+ |  
+ |  push_python_object(python_object, s3_uri)
  |      write python objects/variables etc  into S3 bucket
  |      :param string bucket: bucket name
  |      :param string sub_bucket: sub-bucket name
  |      :param string file_name: name of the file to be written
  |      :return None
  |  
- |  push_local_data(model_file_name, bucket, sub_bucket)
+ |  read_csv(s3_uri)
  |      write data stored in local machine into S3 bucket from
- |      :param string bucket: bucket name
- |      :param string sub_bucket: sub-bucket name
- |      :param string file_name: name of the file to be written
- |      :return None
+ |      :param string s3_uri: csv file S3 URI
+ |      :return df : pandas dataframe
+ |  
+ |  ----------------------------------------------------------------------
   
 ```
 ---
@@ -392,50 +407,37 @@ class LogFormatter(logging.Formatter):
     
     
 **Code Snippet Sample :**
-```
-from custom_utils.slack_alerter import Alerter
-try:
-    """Write your code"""
-except:
-    """Catch exceptions"""
-    Alerter.send_alert(message=message, url=url, userId=userId, send_error=True) 
+```python3
+from custom_utils.alerter.slack import Slack
+slack = Slack(token=SLACK_BOT_TOKEN) # OR Slack() with  SLACK_BOT_TOKEN as env variable
+channel="#shield"
+message = "testing"
+uids = ["U03PAP8C1RC", "U03PAP8C1RC"]
+slack.send_alert(channel, message, uids)
 ```
     
 **Alerter Documentation :**
 ```python
-class Alerter(builtins.object)
-     |  Class for sending alerts and monitoring stats to a slack channel
-     |  
-     |  Static methods defined here:
-     |  
-     |  send_alert(message: str, url: str, user_id: str = None, send_error: bool = False)
-     |      This function send alert to a target channel tagging a user
-     |                         with a alert message and traceback error.
-     |      args:
-     |              message     : Pass the message to be displayed in the channel
-     |              url         : Pass webhook of target channel
-     |              user_id     : Slack user_id of user who needs to be tagged (
-     |              send_error  : This should be set True,
-     |                           if slack_alert is called while catching exception
-     |      returns: Nothing
-     |  
-     |  send_monitoring_stats(start: tuple, stop: tuple, message: str, url: str, user_id: str = None)
-     |      This function send run time and RAM usage for a cronjob
-     |      to a target channel tagging a user with a  message
-     |      
-     |      Args:
-     |              message : Pass the message to be displayed in the channel
-     |              url : Pass webhook of target channel
-     |              user_id : Slack user_id of user who needs to be tagged
-     |              start : this should be set to output of start_monitoring function
-     |              stop : this should be set to output of start_monitoring function
-     |  
-     |  start_monitoring()
-     |      function for initiating monitoring
-     |  
-     |  stop_monitoring()
-     |      function for end monitoring
-     |  
-     |  ----------------------------------------------------------------------
+class Slack(builtins.object)
+ |  Slack(token=None)
+ |
+ |  Class for sending alerts and monitoring stats to a slack channel
+ |
+ |  Methods defined here:
+ |
+ |  __init__(self, token=None)
+ |      Initialize self.  See help(type(self)) for accurate signature.
+ |
+ |  send_alert(self, channel: str, message: str, uids: list = [])
+ |      This function send alert to a target channel tagging a user
+ |                          with a alert message and traceback error.
+ |      args:
+ |          channel     : Name of the channel (ex : #channel_name)
+ |          message     : Pass the message to be displayed in the channel
+ |          uids        : List of Slack user_ids  who needs to be tagged
+ |
+ |      returns: Nothing
+ |
+ |  ----------------------------------------------------------------------
 ```
 ---

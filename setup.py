@@ -12,6 +12,7 @@ EXTRAS_REQUIRE = {
                'SQLAlchemy-Utils', 'mysql-connector', 'mysql-replication',],
     'bigquery': ['tqdm==4.49.0','google-cloud-bigquery==2.1.0', 'pandas_gbq', 'google-cloud' ],
     'mongodb': ['pymongo==3.10.0'],
+    'slack': ['slack-sdk==3.21.3'],
 }
 
 # construct special 'full' extra that adds requirements for all built-in

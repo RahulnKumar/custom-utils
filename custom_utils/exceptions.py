@@ -26,3 +26,6 @@ class MongodbDataFetchError(Exception):
 
 class MongodbGenericError(Exception):
     """Raised when there MongoDB API is falied"""
+
+class SlackError(Exception):
+    """Raised when there SLACK_BOT_TOKEN is not passed or invalid"""
