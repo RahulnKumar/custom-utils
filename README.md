@@ -30,7 +30,7 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 
 ***
 
-## 1.  Installation<a id="Installation" name="Installation">    
+## 1.  Installation<a id="1--installation" name="Installation">    
 
 - **Installation from Pypi repository** (Any one)
 	
@@ -49,7 +49,7 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 ## 2. Connector<a id="2-connector" name="Connector">
 
     
-### 1. S3 Connector<a id="S3_Connector" name="S3_Connector">     
+### 1. S3 Connector<a id="1-s3-connector">     
 
 **Code Snippet Sample :**
 ```python
