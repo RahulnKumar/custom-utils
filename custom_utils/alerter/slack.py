@@ -2,7 +2,7 @@
 
 import os
 from slack_sdk import WebClient
-from exceptions import SlackError
+from custom_utils.exceptions import SlackError
 
 class Slack:
     """Class for sending alerts and monitoring stats to a slack channel"""
