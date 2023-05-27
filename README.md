@@ -66,10 +66,10 @@ Credential.set(ACCESS_KEY="*********", SECRET_KEY="*********")
 from custom_utils.connector.s3 import S3
 
 # Uplaoding data to S3
-S3.push_data(python_data_object, bucket, sub_bucket, file_name)
+S3.push_local_data(file_path, s3_uri)
                              
 # Doownlaoding data from S3
-data = S3.pull_data(bucket, sub_bucket, file_name)
+S3.pull_s3_data(file_path, s3_uri)
 ```
 
 **S3 Connector Documentation**
