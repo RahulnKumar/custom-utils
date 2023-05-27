@@ -53,7 +53,12 @@ Pip Package for Database Connectors, Alerter, Log Formatter etc
 
 **Code Snippet Sample :**
 ```python
-## Setup Credentials :
+## To use S3 either setup AWS CLI or set the credentials from pip package only
+
+## Setup AWS CLI
+sudo apt install awscli && aws configure
+
+## Setup Credentials from pip package
 from custom_utils.configurer.utils import Credential
 Credential.set(ACCESS_KEY="*********", SECRET_KEY="*********")
 
